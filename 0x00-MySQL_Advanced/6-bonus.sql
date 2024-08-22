@@ -6,9 +6,9 @@ CREATE PROCEDURE addBonus(
     score FLOAT
 )
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM projects WHERE name = project_name) THEN
-        INSERT INTO projects(name) VALUES (project_name);
+    IF NOT EXISTS (SELECT 1 FROM `projects` WHERE `name` = project_name) THEN
+        INSERT INTO projects(`name`) VALUES (project_name);
     END IF;
-    INSERT INTO corrections
-    VALUES (user_id, (SELECT id FROM projects WHERE name = project_name LIMIT 1), score);
+    INSERT INTO `corrections`
+    VALUES (user_id, (SELECT `id` FROM `projects` WHERE `name` = project_name LIMIT 1), score);
 END $$
