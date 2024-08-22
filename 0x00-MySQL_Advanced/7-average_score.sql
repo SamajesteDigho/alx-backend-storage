@@ -1,4 +1,5 @@
 -- For: Procedure for computing the Average score for a user
+DROP PROCEDURE IF EXISTS ComputeAverageScoreForUser;
 DELIMITER $$
 CREATE PROCEDURE ComputeAverageScoreForUser (user_id INT)
 BEGIN
