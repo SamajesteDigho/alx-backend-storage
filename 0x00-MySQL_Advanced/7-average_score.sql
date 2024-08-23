@@ -2,11 +2,12 @@
 DELIMITER $$
 CREATE PROCEDURE ComputeAverageScoreForUser (IN user_id INT)
 BEGIN
-    UPDATE users u
+    UPDATE users
     JOIN(
-        SELECT AVG(score) as mark
+        SELECT AVG(corrections.score) as mark
         FROM corrections
-        WHERE user_id = user_id
-    ) m ON u.id = user_id
-    SET u.average_score = m.mark;
+        WHERE corrections.user_id = user_id
+    ) m ON id = user_id
+    SET average_score = m.mark
+    WHERE id = user_id;
 END $$
