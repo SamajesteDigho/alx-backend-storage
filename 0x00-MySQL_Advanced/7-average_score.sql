@@ -1,9 +1,12 @@
 -- For: Procedure for computing the Average score for a user
-DROP PROCEDURE IF EXISTS ComputeAverageScoreForUser;
 DELIMITER $$
-CREATE PROCEDURE ComputeAverageScoreForUser (user_id INT)
+CREATE PROCEDURE ComputeAverageScoreForUser (IN user_id INT)
 BEGIN
-    UPDATE `users`
-    SET `average_score` = ( SELECT AVG(`score`) FROM `corrections` WHERE `user_id` = user_id )
-    WHERE `id` = user_id;
+    UPDATE users u
+    JOIN(
+        SELECT AVG(score) as mark
+        FROM corrections
+        WHERE user_id = user_id
+    ) m ON u.id = user_id
+    SET u.average_score = m.mark;
 END $$
