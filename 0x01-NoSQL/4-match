@@ -1,2 +1,2 @@
-// Find All that matchs
+// Find All that matchs the expression
 db.school.find({$where: "name = 'Holberton school'"})
