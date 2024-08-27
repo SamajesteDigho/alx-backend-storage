@@ -1,4 +1,4 @@
 // Find All that matchs the expression
 db.school.aggregate([
-    { $match: name = "Holberton school" }
+    { $match: { name: "Holberton school" } }
 ])
