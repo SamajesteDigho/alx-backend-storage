@@ -33,7 +33,7 @@ def display_as_in_exercise(collection):
     """ Display as the exercise requires """
     nb = get_total_document_count(collection)
     print("{} logs".format(nb))
-    print("Methods")
+    print("Methods:")
     methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     data = parse_number_methods(my_collection=collection, methods=methods)
     for x, y in data:
