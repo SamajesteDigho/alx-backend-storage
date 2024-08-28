@@ -30,6 +30,7 @@ def count_documents_with(my_collection, field: str, pattern: str) -> int:
 
 
 def display_as_in_exercise(collection):
+    """ Display as the exercise requires """
     nb = get_total_document_count(collection)
     print("{} logs".format(nb))
     print("Methods")
