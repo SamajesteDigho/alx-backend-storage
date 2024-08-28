@@ -4,6 +4,9 @@
 """
 
 
+import pymongo
+
+
 def top_students(mongo_collection):
     """ Get the top students by thier averages """
     scores = mongo_collection.aggregate([
@@ -17,4 +20,4 @@ def top_students(mongo_collection):
             {"_id": x['_id']},
             {"$set": {"averageScore": x["average"]}}
         )
-    return mongo_collection.find()
+    return mongo_collection.find().sort("averageScore", pymongo.DESCENDING)
