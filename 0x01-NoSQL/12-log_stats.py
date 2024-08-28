@@ -43,8 +43,8 @@ def display_as_in_exercise(collection):
     print("{} status check".format(count))
 
 
-client = MongoClient('mongodb://127.0.0.1:27017')
-db = client.logs
-collection = db.nginx
+if __name__ == "__main__":
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    collection = client.logs.nginx
 
-display_as_in_exercise(collection=collection)
+    display_as_in_exercise(collection=collection)
