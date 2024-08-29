@@ -21,6 +21,26 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """ Call hisotory decorator """
+    @wraps(method)
+    def wrapper(*args, **kwargs):
+        """ The wrapper function """
+        in_name = "{}:inputs".format(method.__qualname__)
+        ot_name = "{}:outputs".format(method.__qualname__)
+        if kwargs:
+            kwargs['self']._redis.rpush(in_name, str(kwargs['data']))
+        else:
+            args[0]._redis.rpush(in_name, str(args[1]))
+        key = method(*args, **kwargs)
+        if kwargs:
+            kwargs['self']._redis.rpush(ot_name, str(key))
+        else:
+            args[0]._redis.rpush(ot_name, str(key))
+        return key
+    return wrapper
+
+
 class Cache():
     """ The cache class for monitoring some stored data """
 
@@ -29,6 +49,7 @@ class Cache():
         self._redis = redis.Redis()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ Store methode procedure and descriptions """
         key: str = str(uuid4())
