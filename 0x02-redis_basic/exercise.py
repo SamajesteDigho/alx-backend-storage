@@ -11,7 +11,7 @@ import redis
 def count_calls(method: Callable) -> Callable:
     """ Count number of times called """
     @wraps(method)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> str:
         """ Wrapped function """
         if kwargs:
             kwargs['self'].increment(method.__qualname__)
@@ -24,7 +24,7 @@ def count_calls(method: Callable) -> Callable:
 def call_history(method: Callable) -> Callable:
     """ Call hisotory decorator """
     @wraps(method)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> str:
         """ The wrapper function """
         in_name = "{}:inputs".format(method.__qualname__)
         ot_name = "{}:outputs".format(method.__qualname__)
@@ -34,9 +34,9 @@ def call_history(method: Callable) -> Callable:
             args[0]._redis.rpush(in_name, str(args[1]))
         key = method(*args, **kwargs)
         if kwargs:
-            kwargs['self']._redis.rpush(ot_name, str(key))
+            kwargs['self']._redis.rpush(ot_name, key)
         else:
-            args[0]._redis.rpush(ot_name, str(key))
+            args[0]._redis.rpush(ot_name, key)
         return key
     return wrapper
 
