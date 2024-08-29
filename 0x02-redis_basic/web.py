@@ -21,8 +21,7 @@ def cache_url(method: Callable) -> Callable:
             value = 1
         else:
             value = int(value) + 1
-        red.set(name=name, value=value)
-        red.expire(name=name, time=10)
+        red.setex(name=name, time=10, value=value)
         return method(*args, **kwargs)
     return wrapper
 
@@ -30,4 +29,5 @@ def cache_url(method: Callable) -> Callable:
 @cache_url
 def get_page(url: str) -> str:
     """ Let's define the function """
-    return requests.get(url=url)
+    data = requests.get(url=url)
+    return data
