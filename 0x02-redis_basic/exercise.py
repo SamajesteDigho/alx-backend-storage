@@ -10,7 +10,6 @@ import redis
 
 def count_calls(method: Callable) -> Callable:
     """ Count number of times called """
-
     @wraps(method)
     def wrapper(*args, **kwargs) -> str:
         """ Wrapped function """
@@ -24,16 +23,15 @@ def count_calls(method: Callable) -> Callable:
 
 def call_history(method: Callable) -> Callable:
     """ Call hisotory decorator """
-
     @wraps(method)
     def wrapper(*args, **kwargs) -> str:
         """ The wrapper function """
         in_name = "{}:inputs".format(method.__qualname__)
         ot_name = "{}:outputs".format(method.__qualname__)
         if kwargs:
-            kwargs['self']._redis.rpush(in_name, str(kwargs['data']))
+            kwargs['self']._redis.rpush(in_name, kwargs['data'])
         else:
-            args[0]._redis.rpush(in_name, str(args[1]))
+            args[0]._redis.rpush(in_name, args[1])
         key = method(*args, **kwargs)
         if kwargs:
             kwargs['self']._redis.rpush(ot_name, key)
@@ -79,3 +77,16 @@ class Cache():
     def increment(self, key: str) -> int:
         """ Increment value stored """
         self._redis.incr(name=key, amount=1)
+
+    def replay(self):
+        """ Let's replay back the game """
+        in_data = self._redis.lrange(name="Cache.store:inputs",
+                                     start=0, end=-1)
+        ot_data = self._redis.lrange(name="Cache.store:outputs",
+                                     start=0, end=-1)
+
+        print("Cache.store was called {} times: ".format(len(in_data)))
+        for x, y in zip(in_data, ot_data):
+            print("Cache.store(*({},)) -> {}".format(
+                x.decode("utf-8"), y.decode("utf-8")
+                ))
