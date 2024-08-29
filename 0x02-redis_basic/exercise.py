@@ -80,13 +80,11 @@ class Cache():
 
     def replay(self):
         """ Let's replay back the game """
-        in_data = self._redis.lrange(name="Cache.store:inputs",
-                                     start=0, end=-1)
-        ot_data = self._redis.lrange(name="Cache.store:outputs",
-                                     start=0, end=-1)
+        in_data = self._redis.lrange("Cache.store:inputs", start=0, end=-1)
+        ot_data = self._redis.lrange("Cache.store:outputs", start=0, end=-1)
 
-        print("Cache.store was called {} times: ".format(len(in_data)))
+        print("Cache.store was called {} times:".format(len(in_data)))
         for x, y in zip(in_data, ot_data):
-            print("Cache.store(*({},)) -> {}".format(
-                x.decode("utf-8"), y.decode("utf-8")
-                ))
+            d_x = x.decode("utf-8")
+            d_y = y.decode("utf-8")
+            print("Cache.store(*('{}',)) -> {}".format(d_x, d_y))
