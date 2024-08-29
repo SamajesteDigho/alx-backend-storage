@@ -14,9 +14,10 @@ def count_calls(method: Callable) -> Callable:
     def wrapper(*args, **kwargs) -> str:
         """ Wrapped function """
         if kwargs:
-            kwargs['self'].increment(method.__qualname__)
+            self = kwargs['self']
         else:
-            args[0].increment(method.__qualname__)
+            self = args[0]
+        self.increment(method.__qualname__)
         return method(*args, **kwargs)
     return wrapper
 
@@ -34,7 +35,7 @@ def call_history(method: Callable) -> Callable:
         else:
             self = args[0]
             data = args[1]
-            
+
         self._redis.rpush(in_name, data)
         key = method(*args, **kwargs)
         self._redis.rpush(ot_name, key)
