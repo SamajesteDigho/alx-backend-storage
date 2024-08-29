@@ -29,14 +29,15 @@ def call_history(method: Callable) -> Callable:
         in_name = "{}:inputs".format(method.__qualname__)
         ot_name = "{}:outputs".format(method.__qualname__)
         if kwargs:
-            kwargs['self']._redis.rpush(in_name, kwargs['data'])
+            self = kwargs['self']
+            data = kwargs['data']
         else:
-            args[0]._redis.rpush(in_name, args[1])
+            self = args[0]
+            data = args[1]
+            
+        self._redis.rpush(in_name, data)
         key = method(*args, **kwargs)
-        if kwargs:
-            kwargs['self']._redis.rpush(ot_name, key)
-        else:
-            args[0]._redis.rpush(ot_name, key)
+        self._redis.rpush(ot_name, key)
         return key
     return wrapper
 
