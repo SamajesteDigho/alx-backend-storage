@@ -10,6 +10,7 @@ import redis
 
 def count_calls(method: Callable) -> Callable:
     """ Count number of times called """
+
     @wraps(method)
     def wrapper(*args, **kwargs) -> str:
         """ Wrapped function """
@@ -23,6 +24,7 @@ def count_calls(method: Callable) -> Callable:
 
 def call_history(method: Callable) -> Callable:
     """ Call hisotory decorator """
+
     @wraps(method)
     def wrapper(*args, **kwargs) -> str:
         """ The wrapper function """
