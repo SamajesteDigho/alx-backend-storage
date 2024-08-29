@@ -20,7 +20,7 @@ def cache_url(method: Callable) -> Callable:
         if value is None:
             value = 1
         else:
-            value = int(value) + 1
+            value = int(value.decode("utf_8")) + 1
         red.setex(name=name, time=10, value=value)
         return method(*args, **kwargs)
     return wrapper
