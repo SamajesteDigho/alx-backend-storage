@@ -17,7 +17,8 @@ def count_calls(method: Callable) -> Callable:
             self = kwargs['self']
         else:
             self = args[0]
-        self.increment(method.__qualname__)
+        name = method.__qualname__
+        self.increment(key=name)
         return method(*args, **kwargs)
     return wrapper
 
