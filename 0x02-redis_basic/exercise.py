@@ -10,6 +10,7 @@ import redis
 
 def count_calls(method: Callable) -> Callable:
     """ Count number of times called """
+    name = method.__qualname__
     @wraps(method)
     def wrapper(*args, **kwargs) -> str:
         """ Wrapped function """
@@ -17,7 +18,6 @@ def count_calls(method: Callable) -> Callable:
             self = kwargs['self']
         else:
             self = args[0]
-        name = method.__qualname__
         self.increment(key=name)
         return method(*args, **kwargs)
     return wrapper
